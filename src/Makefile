@@ -1,5 +1,5 @@
 all:
-	gcc main.c stack.c -Wall -Werror -Wextra
+	gcc -g main.c stack.c sort.c common.c -Wall -Werror -Wextra
 	./a.out
 check:
 	cppcheck --enable=all --force --suppress=missingIncludeSystem *.h *.c

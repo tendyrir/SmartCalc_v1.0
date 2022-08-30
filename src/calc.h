@@ -5,6 +5,7 @@
 #include <stdlib.h>         // malloc, free
 #include <stdbool.h>        // true, false
 #include <string.h>         // memcpy, strlen
+#include <ctype.h>          // isdigit
 
 /* define a node that will hold a pointer to a next node and some data */
 typedef struct node {
@@ -24,11 +25,15 @@ Stack *stack_create(int width);
 void stack_push(Stack *s, const void *data);
 bool stack_pop(Stack *s, void *addr);
 bool stack_peek(Stack *s, void *addr);
-bool stack_emplty(Stack *s);
+bool stack_empty(Stack *s);
 
 /* sort.c */
 char *infix_to_postfix(char *infix_input);
+
+/* common.c */
 int precendence(char op);
 int is_operator(char op);
+int is_left_associative(char op);
+char* create_lexem(char* input);
 
 #endif  // SRC_CALC_H_

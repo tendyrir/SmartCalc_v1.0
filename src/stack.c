@@ -32,7 +32,6 @@ bool stack_pop(Stack *s, void *addr) {
     Node *n = s->top;
     memcpy(addr, n->data, s->width);
     s->top = n->next;
-    stack_peek(s, addr);
     free(n->data);
     free(n);
     s->nelems--;
@@ -47,7 +46,7 @@ bool stack_peek(Stack *s, void *addr) {
     return true;
 }
 
-bool stack_emplty(Stack *s) {
+bool stack_empty(Stack *s) {
     if (s->nelems == 0 && s->top == NULL) {
         return true;
     }

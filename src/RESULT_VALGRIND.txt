@@ -1,0 +1,68 @@
+==85226== Memcheck, a memory error detector
+==85226== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==85226== Using Valgrind-3.19.0.GIT-lbmacos-6ff08b6e31-20220212 and LibVEX; rerun with -h for copyright info
+==85226== Command: ./a.out
+==85226== Parent PID: 85225
+==85226== 
+--85226-- 
+--85226-- Valgrind options:
+--85226--    --leak-check=full
+--85226--    --show-leak-kinds=all
+--85226--    --track-origins=yes
+--85226--    --verbose
+--85226--    --log-file=RESULT_VALGRIND.txt
+--85226-- Output from sysctl({CTL_KERN,KERN_VERSION}):
+--85226--   Darwin Kernel Version 20.6.0: Tue Apr 19 21:04:45 PDT 2022; root:xnu-7195.141.29~1/RELEASE_X86_64
+--85226-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand-rdseed
+--85226-- Page sizes: currently 4096, max supported 4096
+--85226-- Valgrind library directory: /Users/tendyrir/.brew/Cellar/valgrind/HEAD-6ff08b6/libexec/valgrind
+--85226-- ./a.out (rx at 0x100000000, rw at 0x100004000)
+--85226--    reading syms   from primary file (11 53)
+--85226--    dSYM= ./a.out.dSYM/Contents/Resources/DWARF/a.out
+--85226--    reading dwarf3 from dsyms file
+--85226-- /usr/lib/dyld (rx at 0x100010000, rw at 0x1000ac000)
+--85226--    reading syms   from primary file (5 2905)
+--85226-- Scheduler: using generic scheduler lock implementation.
+--85226-- Reading suppressions file: /Users/tendyrir/.brew/Cellar/valgrind/HEAD-6ff08b6/libexec/valgrind/default.supp
+==85226== embedded gdbserver: reading from /var/folders/zz/zyxvpxvq6csfxvn_n00026rh000jp4/T//vgdb-pipe-from-vgdb-to-85226-by-tendyrir-on-???
+==85226== embedded gdbserver: writing to   /var/folders/zz/zyxvpxvq6csfxvn_n00026rh000jp4/T//vgdb-pipe-to-vgdb-from-85226-by-tendyrir-on-???
+==85226== embedded gdbserver: shared mem   /var/folders/zz/zyxvpxvq6csfxvn_n00026rh000jp4/T//vgdb-pipe-shared-mem-vgdb-85226-by-tendyrir-on-???
+==85226== 
+==85226== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==85226== don't want to do, unless you know exactly what you're doing,
+==85226== or are doing some strange experiment):
+==85226==   /Users/tendyrir/.brew/Cellar/valgrind/HEAD-6ff08b6/libexec/valgrind/../../bin/vgdb --pid=85226 ...command...
+==85226== 
+==85226== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==85226==   /path/to/gdb ./a.out
+==85226== and then give GDB the following command
+==85226==   target remote | /Users/tendyrir/.brew/Cellar/valgrind/HEAD-6ff08b6/libexec/valgrind/../../bin/vgdb --pid=85226
+==85226== --pid is optional if only one valgrind process is running
+==85226== 
+--85226-- REDIR: 0x100068c00 (dyld:strcmp) redirected to 0x258058676 (???)
+--85226-- REDIR: 0x100062b74 (dyld:arc4random) redirected to 0x258058714 (???)
+--85226-- REDIR: 0x100067fe0 (dyld:strlen) redirected to 0x258058645 (???)
+--85226-- REDIR: 0x100068f00 (dyld:strcpy) redirected to 0x258058692 (???)
+--85226-- REDIR: 0x100066017 (dyld:strcat) redirected to 0x258058656 (???)
+--85226-- REDIR: 0x100067dc7 (dyld:strlcat) redirected to 0x2580586af (???)
+==85226== Warning: set address range perms: large range [0x7fff200cf000, 0x80001fecf000) (defined)
+==85226== Warning: set address range perms: large range [0x7fff200cf000, 0x7fff7fa6b000) (defined)
+==85226== Warning: set address range perms: large range [0x7fff8e333000, 0x7fffc00cf000) (noaccess)
+==85226== Warning: set address range perms: large range [0x7fffc00cf000, 0x7fffe2f93000) (defined)
+==85226== Warning: set address range perms: large range [0x7fffe2f93000, 0x7fffffe00000) (noaccess)
+--85226-- /Users/tendyrir/.brew/Cellar/valgrind/HEAD-6ff08b6/libexec/valgrind/vgpreload_core-amd64-darwin.so (rx at 0x100128000, rw at 0x10012c000)
+--85226--    reading syms   from primary file (3 54)
+--85226--    dSYM= /Users/tendyrir/.brew/Cellar/valgrind/HEAD-6ff08b6/libexec/valgrind/vgpreload_core-amd64-darwin.so.dSYM/Contents/Resources/DWARF/vgpreload_core-amd64-darwin.so
+--85226-- /Users/tendyrir/.brew/Cellar/valgrind/HEAD-6ff08b6/libexec/valgrind/vgpreload_memcheck-amd64-darwin.so (rx at 0x100134000, rw at 0x10013c000)
+--85226--    reading syms   from primary file (75 63)
+--85226--    dSYM= /Users/tendyrir/.brew/Cellar/valgrind/HEAD-6ff08b6/libexec/valgrind/vgpreload_memcheck-amd64-darwin.so.dSYM/Contents/Resources/DWARF/vgpreload_memcheck-amd64-darwin.so
+--85226-- /usr/local/lib/gcc/10/libgcc_s.1.dylib (rx at 0x100144000, rw at 0x10015c000)
+--85226--    reading syms   from primary file (159 1243)
+==85226== 
+==85226== HEAP SUMMARY:
+==85226==     in use at exit: 0 bytes in 0 blocks
+==85226==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==85226== 
+==85226== All heap blocks were freed -- no leaks are possible
+==85226== 
+==85226== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
