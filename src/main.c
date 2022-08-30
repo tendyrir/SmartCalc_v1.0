@@ -1,22 +1,25 @@
 #include "calc.h"
 
 int main(void) {
-    int arr[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    Stack *intstack = stack_create(sizeof(int));
-
-    for (int i = 0; i < 10; i++) {
-        stack_push(intstack, arr + i);  // 2nd arg is a pointer!
-        printf("pushed: %d\n", arr[i]);
+/*
+ */
+    char input[255] = "2+2*2";
+    Stack *intstack = stack_create(sizeof(char));
+    for (size_t i = 0; i < strlen(input); i++) {
+        stack_push(intstack, input + i);  // 2nd arg is a pointer!
+        printf("pushed: %s\n", input + i);
     }
-
-    int popped_int;  // storage for next pooped element
-
+    char popped_char;  // storage for next pooped element
     // we must pop all elements from the stack to avoid leaks
-    while (stack_pop(intstack, &popped_int)) {
-        printf("popped: %d\n", popped_int);
+    while (stack_pop(intstack, &popped_char)) {
+        printf("popped: %c\n", popped_char);
     }
     // and then free(Stack);
     free(intstack);
+
+    // char input[255] = "1-2/3-4*5";
+
+    // printf("postfix: %s", infix_to_postfix(input));
 
     return 0;
 }
