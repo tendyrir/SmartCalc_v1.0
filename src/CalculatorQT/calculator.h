@@ -25,9 +25,14 @@ private:
 private slots:
     void print_digits();
     void print_operations();
+    void print_trigonometry_function();
 
     void on_button_op_del_clicked();
+    void on_button_op_exe_clicked();
+
 //    void on_button_op_exe_clicked();
+
+
 
 };
 #endif // CALCULATOR_H

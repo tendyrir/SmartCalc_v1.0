@@ -17,15 +17,15 @@
 
 
 // int main(void) {
-//     char *input_str = "2.0+2";
+//    char *input_str = "c(20)+1";
 // /* ---------------- // INFIX TO POSTFIX // ------------ */
-//     char *postfix_str = infix_to_postfix(input_str);
-//     printf("postfix: %s\n", postfix_str);
+//    char *postfix_str = infix_to_postfix(input_str);
+//    printf("postfix: %s\n", postfix_str);
 // /* ---------------- // CALCULATION // ----------------- */
-//     double result = postfix_to_result(postfix_str);
-//     printf(" result: %f\n", result);
+//    double result = postfix_to_result(postfix_str);
+//    printf(" result: %f\n", result);
 
-//     return 0;
+//    return 0;
 // }
 
 
@@ -47,9 +47,11 @@ char* create_lexem(char* infix_input_str) {
     косинус                     c           cos()
     синус                       s           sin()
     тангенс                     t           tg()
+
     арккосинус                  k           acos()
     арксинус                    i           asin()
     арктангенс                  a           atan()
+
     квадратный корень           q           sqrt()
     натуральный логарифм        n           ln()
     десятичный логарифм         o           log()
@@ -67,12 +69,13 @@ char* create_lexem(char* infix_input_str) {
   Фунция void* malloc( size_t size ) выделяется куск непроинициализированной памяти
     // char* lexem = calloc(255, sizeof(char));
 */
-    char* lexem = malloc(next_lexem_start_index * sizeof(char));
+    // char* lexem = malloc(next_lexem_start_index * sizeof(char));
 
-    if (lexem == NULL) {
-        fputs("mem failure, exiting \n", stderr);
-        exit(EXIT_FAILURE);
-    }
+    // if (lexem == NULL) {
+    //     fputs("mem failure, exiting \n", stderr);
+    //     exit(EXIT_FAILURE);
+    // }
+    char* lexem = calloc(255, sizeof(char));
 /* 
   Алгоритм работы функции create_lexem():
     если индекс равен нулю (когда лексема состоит из одного символа)
@@ -92,6 +95,19 @@ char* create_lexem(char* infix_input_str) {
     return lexem;
 }
 
+// char* create_lexem(char* input) {
+//     char* str_of_delims = "m+-*/()^ sсtqnoiak";
+//     int index = strcspn(input, str_of_delims);
+//     char* lexem = calloc(255, sizeof(char));
+//     if (!index) {
+//         lexem[index] = input[index];
+//     } else {
+//         for (int i = 0; i < index; i++) {
+//             lexem[i] = input[i];
+//         }
+//     }
+//     return lexem;
+// }
 
 void sorting_station(char* lexem, CharStack* operations, char* output_str) {
 /* 
@@ -239,11 +255,11 @@ void calculation(char* lexem, DoubleStack* digits) {
         double_stack_push(digits, tmp_res);
     }
 
-    // if (is_function(*lexem)) {
-    //     num1 = double_stack_pop(digits);
-    //     tmp_res = unary_arithmetics(num1, *lexem);
-    //     double_stack_push(digits, tmp_res);
-    // }
+    if (is_function(*lexem)) {
+        num1 = double_stack_pop(digits);
+        tmp_res = unary_arithmetics(num1, *lexem);
+        double_stack_push(digits, tmp_res);
+    }
 }
 
 double binary_arithmetics(double d1, double d2, double op) {
@@ -276,42 +292,42 @@ double binary_arithmetics(double d1, double d2, double op) {
     return res;
 }
 
-// double unary_arithmetics(double d1, double op) {
-//     double res = 0;
-//     int int_val_op_ar = (int) op;
-//     switch (int_val_op_ar) {
-//         case 'c':
-//             res = cos(d1);
-//             break;
-//         case 's':
-//             res = sin(d1);
-//             break;
-//         case 't':
-//             res = tan(d1);
-//             break;
-//         case 'q':
-//             res = sqrt(d1);
-//             break;
-//         case 'n':
-//             res = log10(d1);
-//             break;
-//         case 'o':
-//             res = log(d1);
-//             break;
-//         case 'i':
-//             res = asin(d1);
-//             break;
-//         case 'a':
-//             res = atan(d1);
-//             break;
-//         case 'k':
-//             res = acos(d1);
-//             break;
-//         default:
-//             printf("No cases matched, no arithmetics applied\n");
-//     }
-//     return res;
-// }
+double unary_arithmetics(double d1, double op) {
+    double res = 0;
+    int int_val_op_ar = (int) op;
+    switch (int_val_op_ar) {
+        case 'c':
+            res = cos(d1);
+            break;
+        case 's':
+            res = sin(d1);
+            break;
+        case 't':
+            res = tan(d1);
+            break;
+        case 'q':
+            res = sqrt(d1);
+            break;
+        case 'n':
+            res = log10(d1);
+            break;
+        case 'o':
+            res = log(d1);
+            break;
+        case 'i':
+            res = asin(d1);
+            break;
+        case 'a':
+            res = atan(d1);
+            break;
+        case 'k':
+            res = acos(d1);
+            break;
+        default:
+            printf("No cases matched, no arithmetics applied\n");
+    }
+    return res;
+}
 
 char *infix_to_postfix(char *infix_input_str) {
 /*
@@ -384,3 +400,20 @@ double postfix_to_result(char *input_postfix_str) {
 
     return double_stack_pop(&digits);
 }
+
+// double postfix_to_result(char *postfix_str) {
+//     Stack_double digits = {0};
+//     create_empty_stack_double(&digits);
+
+//     for (int i = strlen(postfix_str); i >= 0; i--) {
+//         if (strlen(postfix_str) == 0) {
+//             break;
+//         }
+//         char *lexema = create_lexem(postfix_str);
+//         postfix_str += strlen(lexema);
+//         // printf("текущая лексема: %s\n", lexema);
+//         сalculation(lexema, &digits);
+//         free(lexema);
+//     }
+//     return pop_double(&digits);
+// }

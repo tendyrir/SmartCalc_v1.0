@@ -1,0 +1,70 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-beb086e159f1e36cd662.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "CalculatorQT",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "CalculatorQT::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CalculatorQT-Debug-12a4d29f40dac90a885a.json",
+					"name" : "CalculatorQT",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "CalculatorQT_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CalculatorQT_autogen-Debug-e4ed08f625e0c9b41913.json",
+					"name" : "CalculatorQT_autogen",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/tendyrir/Documents/SmartCalc_v1.0/src/build-CalculatorQT-Desktop_x86_darwin_generic_mach_o_64bit-Debug",
+		"source" : "/Users/tendyrir/Documents/SmartCalc_v1.0/src/CalculatorQT"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

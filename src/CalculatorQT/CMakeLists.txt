@@ -20,6 +20,8 @@ set(PROJECT_SOURCES
         calculator.cpp
         calculator.h
         calculator.ui
+        qcustomplot.cpp
+        qcustomplot.h
 
         smartcalc.h
         common.c
