@@ -58,4 +58,8 @@ int    precendence(char op);
 int    is_operator(char op);
 int    is_function(char op);
 
+double create_function_graph(char* input,  double x);
+double postfix_to_xy(char *input_postfix_str, double x);
+void   calculation_xy(char* lexem, DoubleStack* digits, double x);
+
 #endif /* SRC_SMARTCALC_H_ */

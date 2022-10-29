@@ -12,8 +12,10 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QWidget>
 #include "qcustomplot.h"
 
@@ -56,12 +58,20 @@ public:
     QPushButton *button_op_sqrt;
     QLabel *result;
     QCustomPlot *widget;
+    QSpinBox *graph_min_x;
+    QSpinBox *graph_max_x;
+    QPushButton *button_graph_build;
+    QPushButton *button_graph_x;
+    QPushButton *button_var_x;
+    QSpinBox *expression_x_replace;
+    QLineEdit *lineEdit;
+    QLineEdit *lineEdit_2;
 
     void setupUi(QMainWindow *Calculator)
     {
         if (Calculator->objectName().isEmpty())
             Calculator->setObjectName(QString::fromUtf8("Calculator"));
-        Calculator->resize(502, 734);
+        Calculator->resize(489, 734);
         QSizePolicy sizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -129,10 +139,10 @@ public:
         button_op_div->setGeometry(QRect(190, 110, 51, 31));
         button_op_exe = new QPushButton(centralwidget);
         button_op_exe->setObjectName(QString::fromUtf8("button_op_exe"));
-        button_op_exe->setGeometry(QRect(250, 110, 51, 91));
+        button_op_exe->setGeometry(QRect(250, 80, 51, 121));
         button_op_del = new QPushButton(centralwidget);
         button_op_del->setObjectName(QString::fromUtf8("button_op_del"));
-        button_op_del->setGeometry(QRect(250, 50, 51, 61));
+        button_op_del->setGeometry(QRect(250, 50, 51, 31));
         button_sign_dot = new QPushButton(centralwidget);
         button_sign_dot->setObjectName(QString::fromUtf8("button_sign_dot"));
         button_sign_dot->setGeometry(QRect(130, 170, 51, 31));
@@ -190,8 +200,32 @@ public:
         result->setMargin(5);
         widget = new QCustomPlot(centralwidget);
         widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(10, 210, 471, 501));
+        widget->setGeometry(QRect(10, 240, 471, 491));
         widget->setAutoFillBackground(true);
+        graph_min_x = new QSpinBox(centralwidget);
+        graph_min_x->setObjectName(QString::fromUtf8("graph_min_x"));
+        graph_min_x->setGeometry(QRect(190, 210, 111, 22));
+        graph_max_x = new QSpinBox(centralwidget);
+        graph_max_x->setObjectName(QString::fromUtf8("graph_max_x"));
+        graph_max_x->setGeometry(QRect(40, 210, 111, 22));
+        button_graph_build = new QPushButton(centralwidget);
+        button_graph_build->setObjectName(QString::fromUtf8("button_graph_build"));
+        button_graph_build->setGeometry(QRect(310, 140, 111, 31));
+        button_graph_x = new QPushButton(centralwidget);
+        button_graph_x->setObjectName(QString::fromUtf8("button_graph_x"));
+        button_graph_x->setGeometry(QRect(310, 170, 51, 31));
+        button_var_x = new QPushButton(centralwidget);
+        button_var_x->setObjectName(QString::fromUtf8("button_var_x"));
+        button_var_x->setGeometry(QRect(430, 180, 51, 31));
+        expression_x_replace = new QSpinBox(centralwidget);
+        expression_x_replace->setObjectName(QString::fromUtf8("expression_x_replace"));
+        expression_x_replace->setGeometry(QRect(370, 210, 111, 22));
+        lineEdit = new QLineEdit(centralwidget);
+        lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+        lineEdit->setGeometry(QRect(10, 210, 31, 20));
+        lineEdit_2 = new QLineEdit(centralwidget);
+        lineEdit_2->setObjectName(QString::fromUtf8("lineEdit_2"));
+        lineEdit_2->setGeometry(QRect(160, 210, 31, 20));
         Calculator->setCentralWidget(centralwidget);
 
         retranslateUi(Calculator);
@@ -234,6 +268,11 @@ public:
         button_op_log->setText(QCoreApplication::translate("Calculator", "log", nullptr));
         button_op_sqrt->setText(QCoreApplication::translate("Calculator", "sqrt", nullptr));
         result->setText(QCoreApplication::translate("Calculator", "0", nullptr));
+        button_graph_build->setText(QCoreApplication::translate("Calculator", "build", nullptr));
+        button_graph_x->setText(QCoreApplication::translate("Calculator", "x", nullptr));
+        button_var_x->setText(QCoreApplication::translate("Calculator", "X", nullptr));
+        lineEdit->setText(QCoreApplication::translate("Calculator", "min", nullptr));
+        lineEdit_2->setText(QCoreApplication::translate("Calculator", "max", nullptr));
     } // retranslateUi
 
 };

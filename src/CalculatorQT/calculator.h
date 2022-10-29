@@ -21,6 +21,10 @@ public:
 
 private:
     Ui::Calculator *ui;
+    QString check_dot;
+    QString calc_input;
+    double current_value;
+    QVector<double> x, y;
 
 private slots:
     void print_digits();
@@ -29,6 +33,7 @@ private slots:
 
     void on_button_op_del_clicked();
     void on_button_op_exe_clicked();
+    void print_function_graph();
 
 //    void on_button_op_exe_clicked();
 

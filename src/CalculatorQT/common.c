@@ -29,6 +29,20 @@
 // }
 
 
+// int main(void) {
+//     double x = 5;
+//     char* input_str = "1+x";
+
+//     char* postfix_str = infix_to_postfix(input_str);
+//     printf("postfix: %s\n", postfix_str);
+
+//     double result = create_function_graph(postfix_str, x);
+
+//     return 0;
+
+// }
+
+
 char* create_lexem(char* infix_input_str) {
 /*
   По условию задачи надо учесть такие операции:
@@ -126,7 +140,7 @@ void sorting_station(char* lexem, CharStack* operations, char* output_str) {
     char top = 0; // символ верхнего элемента стека
 
 /* Если лексема - число, то добавляем в строку вывода */
-    if (isdigit(*lexem)) {
+    if (isdigit(*lexem) || *lexem == 'x') {
         strcat(lexem, " ");
         strcat(output_str, lexem);
     }
@@ -401,19 +415,119 @@ double postfix_to_result(char *input_postfix_str) {
     return double_stack_pop(&digits);
 }
 
-// double postfix_to_result(char *postfix_str) {
-//     Stack_double digits = {0};
-//     create_empty_stack_double(&digits);
 
-//     for (int i = strlen(postfix_str); i >= 0; i--) {
-//         if (strlen(postfix_str) == 0) {
+
+
+
+
+
+
+
+
+
+
+
+double create_function_graph(char* input, double x) {
+    char* postfix_str = infix_to_postfix(input);
+    return postfix_to_xy(postfix_str, x);
+}
+
+// double create_output_xy(char* polish_notation, Stack_sign* sign_st, Stack_digit* digit_st, double x) {
+//     createEmptyStack_digit(digit_st);
+//     createEmptyStack_sign(sign_st);
+//     for (int i = strlen(polish_notation); i > 0; i--) {
+//         if (strlen(polish_notation) == 0) {
 //             break;
 //         }
-//         char *lexema = create_lexem(postfix_str);
-//         postfix_str += strlen(lexema);
-//         // printf("текущая лексема: %s\n", lexema);
-//         сalculation(lexema, &digits);
-//         free(lexema);
+//         char* lexem = create_lexem(polish_notation);
+//         polish_notation = polish_notation + strlen(lexem);
+//         parsing_pol_notation_xy(lexem, sign_st, digit_st, x);
+//         free(lexem);
 //     }
-//     return pop_double(&digits);
+//     return pop_digit(digit_st);;
 // }
+
+double postfix_to_xy(char *input_postfix_str, double x) {
+
+    DoubleStack digits = {0};
+    double_stack_create_empty(&digits);
+
+    CharStack ops = {0};
+    char_stack_create_empty(&ops);
+
+    for (int i = strlen(input_postfix_str); i >= 0; i--) {
+        if (strlen(input_postfix_str) == 0) {
+            break;
+        }
+        char *lexema = create_lexem(input_postfix_str);
+        input_postfix_str += strlen(lexema);
+        calculation_xy(lexema, &digits, x);
+        free(lexema);
+    }
+    return double_stack_pop(&digits);
+}
+
+// void parsing_pol_notation_xy(char* lexema, DoubleStack* digits, CharStack* ops, double x) {
+
+//   char sign_cur = *lexem;
+
+//   if (sign_cur >= 48 && sign_cur <= 57) {
+//     double num = atof(lexem);
+//     push_digit(digit_st, num);
+//   }
+
+//   if (sign_cur == 120) {
+//        push_digit(digit_st, x);
+//   }
+
+//   if (sign_cur == '-' || sign_cur == '+' || sign_cur == '/' ||
+//       sign_cur == '*' || sign_cur == '^' || sign_cur == 'm') {
+//     push_sign(sign_st, sign_cur);
+//     double result = get_operation(digit_st, sign_st);
+//     push_digit(digit_st, result);
+//   }
+
+//   if (sign_cur == 's' || sign_cur == 'c' || sign_cur == 't' ||  // sin cos tan
+//       sign_cur == 'a' || sign_cur == 'i' ||
+//       sign_cur == 'n' ||  // acos asin atan
+//       sign_cur == 'q' || sign_cur == 'l' || sign_cur == 'o') {  // sqrt ln log
+
+//     push_sign(sign_st, sign_cur);
+//     double result = get_operation_unary(digit_st, sign_st);
+//     push_digit(digit_st, result);
+//   }
+
+// }
+
+void calculation_xy(char* lexem, DoubleStack* digits, double x) {
+/* 
+  Это функция вычисления.
+    TODO: доработаь ее с учитыванием всех недоработок, унарного минуса и функций
+*/
+    double lexem_atof = 0;
+    double tmp_res = 0;
+    double num1 = 0;
+    double num2 = 0;
+
+    if (isdigit(*lexem)) {
+        lexem_atof = atof(lexem);
+        double_stack_push(digits, lexem_atof);
+    }
+    
+    if (*lexem == 'x') {
+       double_stack_push(digits, x);
+    }
+
+    if (is_operator(*lexem)) {
+        num1 = double_stack_pop(digits);
+        num2 = double_stack_pop(digits);
+        tmp_res = binary_arithmetics(num1, num2, *lexem);
+        double_stack_push(digits, tmp_res);
+    }
+
+    if (is_function(*lexem)) {
+        num1 = double_stack_pop(digits);
+        tmp_res = unary_arithmetics(num1, *lexem);
+        double_stack_push(digits, tmp_res);
+    }
+}
