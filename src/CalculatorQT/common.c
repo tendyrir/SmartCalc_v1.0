@@ -1,7 +1,6 @@
 /* 
     Программа Smart_Calc_1.0 
 
-
     1. Функция infix_to_postfix(char* infix_input_str) конвертирует входную строку в строку
        записанную в обратной польской записи (из инфиксного вида в постфиксный).
         1.1 Функция create_lexem(char* infix_input_str) отделяет часть входной строки,
@@ -15,7 +14,6 @@
 
 #include "smartcalc.h"
 
-
 // int main(void) {
 //    char *input_str = "c(20)+1";
 // /* ---------------- // INFIX TO POSTFIX // ------------ */
@@ -24,7 +22,6 @@
 // /* ---------------- // CALCULATION // ----------------- */
 //    double result = postfix_to_result(postfix_str);
 //    printf(" result: %f\n", result);
-
 //    return 0;
 // }
 
@@ -32,21 +29,16 @@
 // int main(void) {
 //     double x = 5;
 //     char* input_str = "1+x";
-
 //     char* postfix_str = infix_to_postfix(input_str);
 //     printf("postfix: %s\n", postfix_str);
-
 //     double result = create_function_graph(postfix_str, x);
-
 //     return 0;
-
 // }
 
 
 char* create_lexem(char* infix_input_str) {
 /*
   По условию задачи надо учесть такие операции:
-    
     сложение                    +
     вычитание                   -
     умножение                   *
@@ -57,19 +49,15 @@ char* create_lexem(char* infix_input_str) {
     унарный плюс                TODO: выяснить про унарный плюс
     скобка открывающая          (
     скобка закрывающая          )
-
     косинус                     c           cos()
     синус                       s           sin()
     тангенс                     t           tg()
-
     арккосинус                  k           acos()
     арксинус                    i           asin()
     арктангенс                  a           atan()
-
     квадратный корень           q           sqrt()
     натуральный логарифм        n           ln()
     десятичный логарифм         o           log()
-
   Символ пробела нужен для разделения лексем в обратной польской записи 
 */     
     char* delimeters = "+-*/^m~()cstkiaqno ";
@@ -81,15 +69,14 @@ char* create_lexem(char* infix_input_str) {
     int next_lexem_start_index = strcspn(infix_input_str, delimeters);
 /*
   Фунция void* malloc( size_t size ) выделяется куск непроинициализированной памяти
-    // char* lexem = calloc(255, sizeof(char));
 */
     // char* lexem = malloc(next_lexem_start_index * sizeof(char));
-
     // if (lexem == NULL) {
     //     fputs("mem failure, exiting \n", stderr);
     //     exit(EXIT_FAILURE);
     // }
     char* lexem = calloc(255, sizeof(char));
+
 /* 
   Алгоритм работы функции create_lexem():
     если индекс равен нулю (когда лексема состоит из одного символа)
@@ -108,20 +95,6 @@ char* create_lexem(char* infix_input_str) {
 
     return lexem;
 }
-
-// char* create_lexem(char* input) {
-//     char* str_of_delims = "m+-*/()^ sсtqnoiak";
-//     int index = strcspn(input, str_of_delims);
-//     char* lexem = calloc(255, sizeof(char));
-//     if (!index) {
-//         lexem[index] = input[index];
-//     } else {
-//         for (int i = 0; i < index; i++) {
-//             lexem[i] = input[i];
-//         }
-//     }
-//     return lexem;
-// }
 
 void sorting_station(char* lexem, CharStack* operations, char* output_str) {
 /* 
@@ -179,7 +152,7 @@ void sorting_station(char* lexem, CharStack* operations, char* output_str) {
     2. Перекладываем O2 из стека в выходную очередь.
     3. Помещаем O1 в стек.
 */
-    if (is_operator(*lexem)) {
+    if (is_operator(*lexem) || is_unary(*lexem)) {
 
         if (!char_stack_is_empty(operations))
             top = char_stack_peek(operations);
@@ -218,6 +191,12 @@ int is_function(char op) {
     return 0;
 }
 
+int is_unary(char op) {
+    if (op == '~')
+        return 1;
+    return 0;
+}
+
 /* Функция установки приоритета операции */
 int precendence(char op) {
     // TODO: переписать под if else?
@@ -236,18 +215,21 @@ int precendence(char op) {
         case '/':
             prec = 2;
             break;
+        case 'm':
+            prec = 2;
+            break;
         case '^':
             prec = 3;
             break;
-        default:
-            printf("No cases matched, no precendence applied to %d\n", prec);
+        // default:
+        //     printf("No cases matched, no precendence applied to %d\n", prec);
     }
 
     return prec;
 }
 
 
-void calculation(char* lexem, DoubleStack* digits) {
+void calculation(char* lexem, DoubleStack* digits, double x) {
 /* 
   Это функция вычисления.
     TODO: доработаь ее с учитыванием всех недоработок, унарного минуса и функций
@@ -261,7 +243,11 @@ void calculation(char* lexem, DoubleStack* digits) {
         lexem_atof = atof(lexem);
         double_stack_push(digits, lexem_atof);
     }
-    
+
+    if (*lexem == 'x') {
+       double_stack_push(digits, x);
+    }
+
     if (is_operator(*lexem)) {
         num1 = double_stack_pop(digits);
         num2 = double_stack_pop(digits);
@@ -269,7 +255,7 @@ void calculation(char* lexem, DoubleStack* digits) {
         double_stack_push(digits, tmp_res);
     }
 
-    if (is_function(*lexem)) {
+    if (is_function(*lexem) || is_unary(*lexem)) {
         num1 = double_stack_pop(digits);
         tmp_res = unary_arithmetics(num1, *lexem);
         double_stack_push(digits, tmp_res);
@@ -300,8 +286,8 @@ double binary_arithmetics(double d1, double d2, double op) {
         case '^':
             res = pow(d2, d1);
             break;
-        default:
-            printf("No cases matched, no arithmetics applied\n");
+        // default:
+        //     printf("No cases matched, no arithmetics applied\n");
     }
     return res;
 }
@@ -337,8 +323,10 @@ double unary_arithmetics(double d1, double op) {
         case 'k':
             res = acos(d1);
             break;
-        default:
-            printf("No cases matched, no arithmetics applied\n");
+        case '~':
+            res = d1 * (-1);
+        // default:
+        //     printf("No cases matched, no arithmetics applied\n");
     }
     return res;
 }
@@ -408,7 +396,7 @@ double postfix_to_result(char *input_postfix_str) {
         }
         char *lexema = create_lexem(input_postfix_str);
         input_postfix_str += strlen(lexema);
-        calculation(lexema, &digits);
+        calculation(lexema, &digits, 0);
         free(lexema);
     }
 
@@ -416,36 +404,10 @@ double postfix_to_result(char *input_postfix_str) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
 double create_function_graph(char* input, double x) {
     char* postfix_str = infix_to_postfix(input);
     return postfix_to_xy(postfix_str, x);
 }
-
-// double create_output_xy(char* polish_notation, Stack_sign* sign_st, Stack_digit* digit_st, double x) {
-//     createEmptyStack_digit(digit_st);
-//     createEmptyStack_sign(sign_st);
-//     for (int i = strlen(polish_notation); i > 0; i--) {
-//         if (strlen(polish_notation) == 0) {
-//             break;
-//         }
-//         char* lexem = create_lexem(polish_notation);
-//         polish_notation = polish_notation + strlen(lexem);
-//         parsing_pol_notation_xy(lexem, sign_st, digit_st, x);
-//         free(lexem);
-//     }
-//     return pop_digit(digit_st);;
-// }
 
 double postfix_to_xy(char *input_postfix_str, double x) {
 
@@ -461,73 +423,71 @@ double postfix_to_xy(char *input_postfix_str, double x) {
         }
         char *lexema = create_lexem(input_postfix_str);
         input_postfix_str += strlen(lexema);
-        calculation_xy(lexema, &digits, x);
+        calculation(lexema, &digits, x);
         free(lexema);
     }
     return double_stack_pop(&digits);
 }
 
-// void parsing_pol_notation_xy(char* lexema, DoubleStack* digits, CharStack* ops, double x) {
+// void calculation_xy(char* lexem, DoubleStack* digits, double x) {
+// /* 
+//   Это функция вычисления.
+//     TODO: доработаь ее с учитыванием всех недоработок, унарного минуса и функций
+// */
+//     double lexem_atof = 0;
+//     double tmp_res = 0;
+//     double num1 = 0;
+//     double num2 = 0;
 
-//   char sign_cur = *lexem;
+//     if (isdigit(*lexem)) {
+//         lexem_atof = atof(lexem);
+//         double_stack_push(digits, lexem_atof);
+//     }
+    
+//     if (*lexem == 'x') {
+//        double_stack_push(digits, x);
+//     }
 
-//   if (sign_cur >= 48 && sign_cur <= 57) {
-//     double num = atof(lexem);
-//     push_digit(digit_st, num);
-//   }
+//     if (is_operator(*lexem)) {
+//         num1 = double_stack_pop(digits);
+//         num2 = double_stack_pop(digits);
+//         tmp_res = binary_arithmetics(num1, num2, *lexem);
+//         double_stack_push(digits, tmp_res);
+//     }
 
-//   if (sign_cur == 120) {
-//        push_digit(digit_st, x);
-//   }
-
-//   if (sign_cur == '-' || sign_cur == '+' || sign_cur == '/' ||
-//       sign_cur == '*' || sign_cur == '^' || sign_cur == 'm') {
-//     push_sign(sign_st, sign_cur);
-//     double result = get_operation(digit_st, sign_st);
-//     push_digit(digit_st, result);
-//   }
-
-//   if (sign_cur == 's' || sign_cur == 'c' || sign_cur == 't' ||  // sin cos tan
-//       sign_cur == 'a' || sign_cur == 'i' ||
-//       sign_cur == 'n' ||  // acos asin atan
-//       sign_cur == 'q' || sign_cur == 'l' || sign_cur == 'o') {  // sqrt ln log
-
-//     push_sign(sign_st, sign_cur);
-//     double result = get_operation_unary(digit_st, sign_st);
-//     push_digit(digit_st, result);
-//   }
-
+//     if (is_function(*lexem)) {
+//         num1 = double_stack_pop(digits);
+//         tmp_res = unary_arithmetics(num1, *lexem);
+//         double_stack_push(digits, tmp_res);
+//     }
 // }
 
-void calculation_xy(char* lexem, DoubleStack* digits, double x) {
-/* 
-  Это функция вычисления.
-    TODO: доработаь ее с учитыванием всех недоработок, унарного минуса и функций
-*/
-    double lexem_atof = 0;
-    double tmp_res = 0;
-    double num1 = 0;
-    double num2 = 0;
 
-    if (isdigit(*lexem)) {
-        lexem_atof = atof(lexem);
-        double_stack_push(digits, lexem_atof);
-    }
-    
-    if (*lexem == 'x') {
-       double_stack_push(digits, x);
-    }
+char* replace_unary_minus(char* input) {
 
-    if (is_operator(*lexem)) {
-        num1 = double_stack_pop(digits);
-        num2 = double_stack_pop(digits);
-        tmp_res = binary_arithmetics(num1, num2, *lexem);
-        double_stack_push(digits, tmp_res);
+    int minus = 0;
+    int minus_after_brace = 0;
+    char* input_change = calloc(255, sizeof(char));
+    for (size_t i = 0; i < strlen(input); i++) {
+        if (input[i] == '-' && i == 0) {
+            minus = 1;
+        }
+        if (input[i] == '(' && input[i + 1] == '-') {
+            minus_after_brace = 1;
+        }
+        if (minus) {
+            input_change[i] = '~';
+        } else if (minus_after_brace) {
+            input_change[i] = '(';
+            input_change[i + 1] = '~';
+            i++;
+        } else {
+            input_change[i] = input[i];
+        }
+        minus = 0;
+        minus_after_brace = 0;
     }
-
-    if (is_function(*lexem)) {
-        num1 = double_stack_pop(digits);
-        tmp_res = unary_arithmetics(num1, *lexem);
-        double_stack_push(digits, tmp_res);
-    }
+    return input_change;
 }
+
+

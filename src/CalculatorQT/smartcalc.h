@@ -52,7 +52,7 @@ char*  create_lexem(char* infix_input_str);
 void   sorting_station(char *lexem, CharStack *ops, char *output);
 double binary_arithmetics(double d1, double d2, double op);
 double unary_arithmetics(double d1, double op) ;
-void   calculation(char *lexem, DoubleStack *digits);
+void   calculation(char *lexem, DoubleStack *digits, double x);
 int    is_left_associative(char op);
 int    precendence(char op);
 int    is_operator(char op);
@@ -60,6 +60,8 @@ int    is_function(char op);
 
 double create_function_graph(char* input,  double x);
 double postfix_to_xy(char *input_postfix_str, double x);
-void   calculation_xy(char* lexem, DoubleStack* digits, double x);
+// void   calculation_xy(char* lexem, DoubleStack* digits, double x);
+char* replace_unary_minus(char* input);
+int is_unary(char op);
 
 #endif /* SRC_SMARTCALC_H_ */

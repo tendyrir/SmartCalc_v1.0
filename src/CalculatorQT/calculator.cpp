@@ -51,9 +51,12 @@ Calculator::Calculator(QWidget *parent) : QMainWindow(parent), ui(new Ui::Calcul
     connect(ui->button_sign_clb, SIGNAL(clicked()), this, SLOT(print_operations()));
     connect(ui->button_sign_dot, SIGNAL(clicked()), this, SLOT(print_operations()));
 
+    connect(ui->button_var_x, SIGNAL(clicked()), this, SLOT(on_button_var_x_clicked()));
+
 
     connect(ui->button_graph_x, SIGNAL(clicked()), this, SLOT(print_digits()));
     connect(ui->button_graph_build, SIGNAL(clicked()), this, SLOT(print_function_graph()));
+
 
 }
 
@@ -92,15 +95,15 @@ void Calculator::print_digits() {
 ////    calc_input = button->text();
 //  }
 
-////  if (button->text() == "mod") {
-////    input_real = input_real + "m";
-////  } else {
-////    if (ui->label->text() != "0") {
-////      input_real = input_real + button->text();
-////    } else {
-////      input_real = button->text();
-////    }
-////  }
+//  if (button->text() == "mod") {
+//    input_real = input_real + "m";
+//  } else {
+//    if (ui->label->text() != "0") {
+//      input_real = input_real + button->text();
+//    } else {
+//      input_real = button->text();
+//    }
+//  }
 //}
 
 void Calculator::print_operations() {
@@ -110,13 +113,15 @@ void Calculator::print_operations() {
       sender();
   QString input_check = ui->input->text();
   QString array[] = {"+", "-", "/", "*", "mod"};
+
   for(int i = 0; i < 5; i++) {
     if(input_check.endsWith(array[i])) {
       aboba = false;
       break;
     }
   }
-  if(aboba) {
+
+  if (aboba) {
     if (ui->input->text() != "0") {
       ui->input->setText(ui->input->text() + button->text());
     } else {
@@ -132,15 +137,20 @@ void Calculator::print_operations() {
       }
     }
   }
+
 }
 
+
+/*
+ * Reseting calculator to zero
+*/
 void Calculator::on_button_op_del_clicked() {
   ui->input->setText("0");
-//  input_real = "0";
-//  ui->widget->graph(0)->data()->clear();
+  calc_input = "0";
+  ui->widget->graph(0)->data()->clear();
   check_dot = 0;
-//  x.clear();
-//  y.clear();
+  x.clear();
+  y.clear();
 }
 
 //void Calculator::on_button_op_exe_clicked() {
@@ -157,10 +167,8 @@ void Calculator::on_button_op_del_clicked() {
 //  }
 //}
 
-void Calculator::on_button_op_exe_clicked()
-{
+void Calculator::on_button_op_exe_clicked() {
     QString text;
-
 //    if (X_output != "q") {
 //        change_X();
 //        text = qtext;
@@ -168,21 +176,18 @@ void Calculator::on_button_op_exe_clicked()
 //        text = input_real;
 //    }
     text = ui->input->text();
-
     QByteArray str_bit = text.toLocal8Bit();
-
     char *input_str = str_bit.data();
 //  int code = validation(input_str);
 //  if (code) {
 //    ui->label_2->setText("Error");
 //  } else {
 
-    char *infix = infix_to_postfix(input_str);
 
+    char* infix_input_with_unary_minus = replace_unary_minus(input_str);
+    char* infix = infix_to_postfix(infix_input_with_unary_minus);
     double output = postfix_to_result(infix);
-
     QString str_output = QString::number(output);
-
     ui->input->setText(str_output);
 //  }
 }
@@ -195,120 +200,93 @@ void Calculator::print_trigonometry_function() {
   button->setChecked(true);
 
   if (button->text() == "sin") {
-
-//    if (ui->input->text() != "0") {
-//      input_real = input_real + "s(";
-//    } else {
-//      input_real = "s(";
-//    }
-
     if (ui->input->text() != "0") {
-      ui->input->setText(ui->input->text() + "s(");
+      calc_input = calc_input + "s(";
+      ui->input->setText(ui->input->text() + "sin(");
     } else {
-      ui->input->setText("s(");
+      calc_input = "s(";
+      ui->input->setText("sin(");
     }
-
-
   }
+
   if (button->text() == "cos") {
-
-//    if (ui->input->text() != "0") {
-//      input_real = input_real + "c(";
-//    } else {
-//      input_real = "c(";
-//    }
-      if (ui->input->text() != "0") {
-        ui->input->setText(ui->input->text() + "c(");
-      } else {
-        ui->input->setText("c(");
-      }
-
+    if (ui->input->text() != "0") {
+      calc_input = calc_input + "c(";
+      ui->input->setText(ui->input->text() + "cos(");
+    } else {
+      calc_input = "c(";
+      ui->input->setText("cos(");
+    }
   }
-  if (button->text() == "tan") {
-//    if (ui->input->text() != "0") {
-//      input_real = input_real + "t(";
-//    } else {
-//      input_real = "t(";
-//    }
-      if (ui->input->text() != "0") {
-        ui->input->setText(ui->input->text() + "t(");
-      } else {
-        ui->input->setText("t(");
-      }
+
+  if (button->text() == "tg") {
+    if (ui->input->text() != "0") {
+      calc_input = calc_input + "t(";
+      ui->input->setText(ui->input->text() + "tg(");
+    } else {
+      calc_input = "t(";
+      ui->input->setText("tg(");
+    }
   }
+
   if (button->text() == "acos") {
-//    if (ui->input->text() != "0") {
-//      input_real = input_real +"a(";
-//    } else {
-//      input_real ="a(";
-//    }
-      if (ui->input->text() != "0") {
-        ui->input->setText(ui->input->text() + "k(");
-      } else {
-        ui->input->setText("k(");
-      }
+    if (ui->input->text() != "0") {
+      calc_input = calc_input +"k(";
+      ui->input->setText(ui->input->text() + "acos(");
+    } else {
+      calc_input ="k(";
+      ui->input->setText("acos(");
+    }
+  }
 
-  }
   if (button->text() == "asin") {
-//    if (ui->input->text() != "0") {
-//      input_real = input_real + "i(";
-//    } else {
-//      input_real = "i(";
-//    }
-      if (ui->input->text() != "0") {
-        ui->input->setText(ui->input->text() + "i(");
-      } else {
-        ui->input->setText("i(");
-      }
+    if (ui->input->text() != "0") {
+      calc_input = calc_input + "i(";
+      ui->input->setText(ui->input->text() + "asin(");
+    } else {
+      calc_input = "i(";
+      ui->input->setText("asin(");
+    }
   }
+
   if (button->text() == "atan") {
-//    if (ui->input->text() != "0") {
-//      input_real = input_real + "n(";
-//    } else {
-//      input_real = "n(";
-//    }
-      if (ui->input->text() != "0") {
-        ui->input->setText(ui->input->text() + "a(");
-      } else {
-        ui->input->setText("a(");
-      }
+    if (ui->input->text() != "0") {
+      calc_input = calc_input + "n(";
+      ui->input->setText(ui->input->text() + "a(");
+    } else {
+      calc_input = "n(";
+      ui->input->setText("a(");
+    }
   }
 
   if (button->text() == "sqrt") {
-//    if (ui->input->text() != "0") {
-//      input_real = input_real + "q(";
-//    } else {
-//      input_real = "q(";
-//    }
-      if (ui->input->text() != "0") {
-        ui->input->setText(ui->input->text() + "q(");
-      } else {
-        ui->input->setText("q(");
-      }
+    if (ui->input->text() != "0") {
+      calc_input = calc_input + "q(";
+      ui->input->setText(ui->input->text() + "sqrt(");
+    } else {
+      calc_input = "q(";
+      ui->input->setText("sqrt(");
+    }
   }
+
   if (button->text() == "ln") {
-//    if (ui->input->text() != "0") {
-//      input_real = input_real + + "l(";
-//    } else {
-//      input_real = "l(";
-//    }
-      if (ui->input->text() != "0") {
-        ui->input->setText(ui->input->text() + "n(");
-      } else {
-        ui->input->setText("n(");
-      }
+    if (ui->input->text() != "0") {
+      calc_input = calc_input + + "l(";
+      ui->input->setText(ui->input->text() + "ln(");
+    } else {
+      calc_input = "l(";
+      ui->input->setText("n(");
+    }
   }
+
   if (button->text() == "log") {
-//    if (ui->input->text() != "0") {
-//      input_real = input_real + "o(";
-//    } else {
-//      input_real = "o(";
-//    }
-      if (ui->input->text() != "0") {
-        ui->input->setText(ui->input->text() + "o(");
-      } else {
-        ui->input->setText("o(");
-      }
+    if (ui->input->text() != "0") {
+      calc_input = calc_input + "o(";
+      ui->input->setText(ui->input->text() + "log(");
+    } else {
+      calc_input = "o(";
+      ui->input->setText("log(");
+    }
   }
 
 //  if (ui->input->text() != "0") {
@@ -386,4 +364,37 @@ void Calculator::print_function_graph() {
 //    }
 //  }
 //}
+
+
+void Calculator::on_button_var_x_clicked() {
+    QString new_label;
+
+    if (ui->input->text() != "0") {
+      new_label = ui->input->text() + "X";
+      calc_input = calc_input + "X";
+
+    } else {
+      new_label = "X";
+      calc_input = "X";
+    }
+
+//    isClickedX = true;
+
+    ui->input->setText(new_label);
+}
+
+std::string Calculator::change_X(std::string X) {
+  std::string input_real_string = "";
+  input_real_string = input_real.toStdString();
+  size_t pos = 0;
+  for (;;) {
+    pos = input_real_string.find("X", pos);
+    if (pos == std::string::npos) break;
+    input_real_string.replace(pos, 1, X);
+    pos += X.size();
+  }
+
+  return input_real_string;
+}
+
 

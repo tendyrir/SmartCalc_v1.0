@@ -39,5 +39,6 @@ private slots:
 
 
 
+    void on_button_var_x_clicked();
 };
 #endif // CALCULATOR_H
