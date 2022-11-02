@@ -1,0 +1,4 @@
+/Users/tendyrir/Desktop/SmartCalc_v1.0/build-src2-Desktop_x86_darwin_generic_mach_o_64bit-Debug/CMakeFiles/src.dir
+/Users/tendyrir/Desktop/SmartCalc_v1.0/build-src2-Desktop_x86_darwin_generic_mach_o_64bit-Debug/CMakeFiles/edit_cache.dir
+/Users/tendyrir/Desktop/SmartCalc_v1.0/build-src2-Desktop_x86_darwin_generic_mach_o_64bit-Debug/CMakeFiles/rebuild_cache.dir
+/Users/tendyrir/Desktop/SmartCalc_v1.0/build-src2-Desktop_x86_darwin_generic_mach_o_64bit-Debug/CMakeFiles/src_autogen.dir
